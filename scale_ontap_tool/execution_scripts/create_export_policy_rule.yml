@@ -1,0 +1,30 @@
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+  tasks:
+    - name: Create Export Policy Rule
+      na_ontap_export_policy_rule:
+        state: present
+        name: "{{export_policy_rule_name}}"
+        vserver: "{{export_policy_rule_vserver_name}}"
+        client_match: "{{export_policy_rule_client_match}}"
+        ro_rule: "{{export_policy_ro_rule}}"
+        rw_rule: "{{export_policy_rw_rule}}"
+        protocol: "{{export_policy_protocol}}"
+        super_user_security: "{{export_policy_rule_security}}"
+        allow_suid: "{{export_policy_rule_allow_suid}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+        https: true
+        validate_certs: false
+      register: export_policy_rule_create
+      ignore_errors: True
+
+    - name: Print the export policy rule creation job
+      debug: msg="{{export_policy_rule_create}}"
+...
+

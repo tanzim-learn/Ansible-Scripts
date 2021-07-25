@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+  
+  tasks:
+    - name: Create interface
+      na_ontap_interface:
+        state: present
+        interface_name: "{{interface_name}}"
+        home_port: "{{home_port_name}}"
+        home_node: "{{home_node}}"
+        role: "{{interface_role}}"
+        protocols:  "{{interface_protocols}}"
+        admin_status:  "{{interface_admin_status}}"
+        failover_policy:  "{{interface_fo_policy}}"
+        firewall_policy:  "{{interface_fw_policy}}"
+        is_auto_revert:  "{{interface_auto_revert}}"
+        address:  "{{interface_address}}"
+        netmask: "{{interface_netmask}}"
+        force_subnet_association: "{{interface_subnet_association}}"
+        #dns_domain_name: "{{interface_dns}}"
+        listen_for_dns_query: "{{interface_dns_query}}"
+        is_dns_update_enabled: "{{interface_dns_update}}"
+        vserver: "{{interface_vserver_name}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+      ignore_errors: True
+      register: interface_create
+
+    - name: print the interface name
+      debug: msg="{{interface_create}}" 
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

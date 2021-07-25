@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+ 
+  tasks:
+    - name: Create CIFS share
+      na_ontap_cifs:
+        state: present
+        share_name: "{{cifs_share_name}}_{{cifs_share_item}}"
+        path: "{{cifs_path}}"
+        vserver: "{{cifs_vserver_name}}"
+        share_properties: "{{cifs_share_properties}}"
+        symlink_properties: "{{cifs_symlink_properties}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+      with_sequence: start=1 end={{cifs_count}}
+      loop_control:
+        loop_var: cifs_share_item
+      register: Share_Create
+      ignore_errors: True
+    - name: CIFS Share Created 
+      debug: msg="{{ Share_Create }}"
+...

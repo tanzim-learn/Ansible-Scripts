@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+  tasks:
+    - name: Create FlexVol
+      na_ontap_volume:
+        state: present
+        name: "{{volume_name}}"
+        is_infinite: "{{volume_is_infinite}}"
+        aggregate_name: "{{volume_aggregate_name}}"
+        size: "{{volume_size}}"
+        size_unit: "{{volume_size_unit}}"
+        tiering_policy: "{{volume_tiering_policy}}"
+        policy: "{{volume_policy}}"
+        percent_snapshot_space: "{{volume_snpashot_percent}}"
+        vserver: "{{volume_vserver_name}}"
+        wait_for_completion: True
+        space_slo: "{{volume_space_slo}}"
+        nvfail_enabled: "{{volume_nvfail_enabled}}"
+        comment: "{{volume_comment}}"
+        hostname: "{{ netapp_hostname  }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+      register: volcreate
+      ignore_errors: True
+
+    - name: 100 volumes created successfully
+      debug: msg "{{ volcreate }}"
+...

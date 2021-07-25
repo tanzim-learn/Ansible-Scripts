@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+  tasks:
+     - name: Create ipspace
+       na_ontap_ipspace:
+         state: present
+         name: "{{ipspace_name}}_{{ipspace_item}}"
+         hostname: "{{ aiqumip }}"
+         username: "{{ aiqumusername }}"
+         password: "{{ aiqumpassword }}"
+      
+       with_sequence: start=1 end={{ipspace_count}}
+       loop_control:
+         loop_var: ipspace_item
+       register: ipspace_create
+       ignore_errors: true
+
+     - name: print the ipspace creation job
+       debug: msg= "{{ipspace_create}}" 
+...

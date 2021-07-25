@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+  tasks:
+    - name: Enable NFS on SVM
+
+      na_ontap_nfs:
+        state: present
+        service_state: "{{service_state}}"
+        vserver: "{{svm_nfs_name}}"
+        nfsv3: "{{nfsv3}}"
+        nfsv4: "{{nfsv4}}"
+        nfsv41: "{{nfsv41}}"
+        tcp: "{{tcp}}"
+        udp: "{{udp}}"
+        vstorage_state: "{{vstorage_state}}"
+        nfsv4_id_domain: "{{nfsv4_id_domain}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+        https: true
+        validate_certs: false
+      register: svm_nfs_create
+      ignore_errors: True
+
+    - name: Print the svm creation job
+      debug: msg="{{svm_nfs_create}}"
+...

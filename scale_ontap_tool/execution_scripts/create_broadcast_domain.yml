@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+
+  tasks:
+    - name: create broadcast domain
+      na_ontap_broadcast_domain:
+        state: present
+        name: "{{broadcast_name}}_{{broadcast_item}}"
+        mtu: "{{broadcast_mtu}}"
+        ipspace: "{{broadcast_ipspace}}"
+        ports: "{{broadcast_ports}}"
+        username: "{{ aiqumusername }}"
+        password: "{{ aiqumpassword }}"
+        hostname: "{{ aiqumip }}"
+      with_sequence: start=1 end={{broadcast_count}}
+      loop_control:
+        loop_var: broadcast_item
+      ignore_errors: true
+      register: broadcast_create
+
+    - name: print job creation
+      debug: msg : "{{broadcast_create}}"
+...  

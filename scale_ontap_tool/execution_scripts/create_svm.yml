@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+  tasks:
+    - name: Create SVM
+      na_ontap_svm:
+        state: present
+        name: "{{svm_name}}"
+        root_volume: "{{svm_name}}_root_volume"
+        root_volume_aggregate: "{{svm_aggregate}}"
+        root_volume_security_style: "{{ svm_security_style }}"
+        allowed_protocols: "{{svm_allowed_protocols}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+        https: true
+        validate_certs: false
+      register: svm_create
+      ignore_errors: True
+
+    - name: Print the svm creation job
+      debug: msg="{{svm_create}}"
+...

@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+
+  tasks:
+    - name: Create iSCSI Igroup
+      na_ontap_igroup:
+        state: present
+        name: "{{ igroup_name }}"
+        initiator_group_type: "{{ igroup_initiator_type }}"
+        ostype: "{{igroup_ostype}}"
+        initiators: "{{ igroup_initiators}}"
+        vserver: "{{igroup_vserver}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+      register: igroup_create
+      ignore_errors: True
+
+    - name: Print the igroup creation job
+      debug: msg="{{igroup_create}}"
+...    

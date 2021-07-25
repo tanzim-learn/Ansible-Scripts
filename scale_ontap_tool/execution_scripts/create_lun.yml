@@ -1,0 +1,60 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+   
+  tasks:
+    - name: Create LUN
+      na_ontap_lun:
+        state: present
+        name: "{{lun_name}}"
+        flexvol_name: "{{lun_volume_name}}"
+        vserver: "{{lun_vserver_name}}"
+        size: "{{lun_size}}"
+        size_unit: "{{lun_size_unit}}"
+        ostype: "{{lun_ostype}}"
+        space_reserve: "{{lun_space_reserve}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+      ignore_errors: True
+      register: lun_create
+
+    - name: Print the Lun creation job
+      debug: msg="{{lun_create}}"
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

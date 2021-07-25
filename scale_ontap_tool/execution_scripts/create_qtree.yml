@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+  tasks:
+    - name: Create Qtree
+      na_ontap_qtree:
+        state: present
+        name: "{{qtree_name}}"
+        flexvol_name: "{{qtree_volume_name}}"
+        export_policy: "{{qtree_export_policy}}"
+        security_style: "{{qtree_security_style}}"
+        oplocks: "{{qtree_oplocks}}"
+        unix_permissions: "{{qtree_unix_permissions}}"
+        vserver: "{{qtree_vserver_name}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+        https: true
+        validate_certs: false
+      register: qtree_create
+      ignore_errors: True
+
+    - name: Print the qtree creation job
+      debug: msg="{{qtree_create}}"
+...
+

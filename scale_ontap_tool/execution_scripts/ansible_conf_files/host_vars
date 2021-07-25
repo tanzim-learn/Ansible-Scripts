@@ -1,0 +1,143 @@
+#Generic Variables
+netapp_hostname: "172.21.62.149"
+netapp_username: "admin"
+netapp_password: "netapp1!"
+
+#Create Aggregate
+aggregate_name: "systemic_aggr"
+aggregate_disk_count: "6"
+aggregate_time_out: "300"
+aggregate_count: "1" 
+
+
+#Create SVM
+svm_name: "systemic_svm_"
+svm_aggregate: "systemic_aggr_1 "
+svm_security_style: "mixed"
+svm_allowed_protocols: "nfs,cifs,fcp,iscsi"
+svm_count: "1"
+
+
+#Enable NFS on SVM
+service_state: "started"
+svm_nfs_name: "systemic_svm_"
+nfsv3: "disabled"
+nfsv4: "disabled"
+nfsv41: "enabled"
+tcp: "disabled"
+udp: "disabled"
+vstorage_state: "disabled"
+nfsv4_id_domain: "test.com"
+svm_count: "1"
+
+#Create LIFs per SVM
+interface_name: "systemic_svm_lif"
+home_port_name: "eod"
+home_node: "sti60-vsim-ucs133q"
+interface_role: "data"
+interface_protocols: "nfs,cifs,iscsi"
+interface_admin_status: "up"
+interface_fo_policy: "disabled"
+interface_fw_policy: "data"
+interface_auto_revert: "0"
+interface_address: "10.10.10.1"
+interface_netmask: "255.255.255.0"
+interface_subnet_association: "0"
+interface_dns: "systemic-test.com"
+interface_dns_query: "0"
+interface_dns_update: "0"
+interface_vserver_name: "systemic_svm"
+interface_count: "1"
+
+#Create Export Policies per SVM
+export_policy_name: "systemic_export_policy"
+export_policy_vserver_name: "systemic_svm_1"
+export_policy_count: "1"
+
+
+#Create Export Policy Rules per SVM
+export_policy_rule_name: "systemic_export_rule"
+export_policy_rule_vserver_name: "test_tan"
+export_policy_rule_client_match: "0.0.0.0"
+export_policy_ro_rule: "any"
+export_policy_rw_rule: "any"
+export_policy_protocol: "any"
+export_policy_rule_security: "any"
+export_policy_rule_allow_suid: "True"
+export_policy_rule_count: "1"
+
+#Create Volumes per SVM
+volume_name: "systemic_volume"
+volume_aggregate_name: "systemic_aggr_1"
+volume_vserver_name: "systemic_svm"
+volume_is_infinite: "False"
+volume_size: "100"
+volume_size_unit: "mb"
+volume_tiering_policy: "auto"
+volume_policy: "default"
+volume_snpashot_percent: "60"
+volume_space_slo: "none"
+volume_nvfail_enabled: "False"
+volume_comment: "Systemic Test Volume created via Ansible"
+volume_count: "1"
+
+#Create QTrees per volume
+qtree_name: "systemic_qtree"
+qtree_volume_name: "systemic_volume"
+qtree_export_policy: "systemic_export_policy"
+qtree_security_style: "mixed"
+qtree_oplocks: "disabled"
+qtree_unix_permissions: ""
+qtree_vserver_name: "systemic_svm"
+qtree_count: "1"
+
+#Create LUNs per volume
+lun_name: "systemic_lun"
+lun_volume_name: "systemic_volume"
+lun_vserver_name: "systemic_svm"
+lun_size: "5"
+lun_size_unit: "mb"
+lun_ostype: "linux"
+lun_space_reserve: "True"
+lun_count: "1"
+
+#Create CIFS shares per SVM
+cifs_share_name: "systemic_cifs"
+cifs_vserver_name: "systemic_svm"
+cifs_path: "/"
+cifs_share_properties: " browsable,oplocks"
+cifs_symlink_properties: "read_only,enable"
+cifs_count: "1"
+
+
+#Create IPSpace
+ipspace_name: "systemic_ipspace"
+ipspace_count: "1"
+
+#Create Broadcast Domain
+broadcast_name: "systemic_domain"
+broadcast_mtu: "1000"
+broadcast_ipspace: "Default"
+broadcast_ports: "e0d"
+broadcast_count: "1"
+
+#Create Clone
+
+
+#Create Igroup
+igroup_name: "systemic_igroup"
+igroup_initiator_type: "iscsi"
+igroup_ostype: "linux"
+igroup_initiators: "iqn.1994-05.com.redhat:90dea4d3077"
+igroup_vserver: "systemic_vserver"
+igroup_count: "1"
+
+
+#Create Snapshot Policy
+sp_name: "systemic_snapshot"
+sp_schedule: "hourly"
+sp_count: "150"
+sp_enabled: "True"
+sp_count_iter: "1"
+
+

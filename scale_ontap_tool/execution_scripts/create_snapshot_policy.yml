@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+  tasks:
+    - name: Create Snapshot policy
+      na_ontap_snapshot_policy:
+        state: present
+        name: "{{sp_name}}_{{sp_item}}"
+        schedule: "{{sp_schedule}}"
+        count: "{{sp_count}}"
+        enabled: "{{sp_enabled}}"
+        username: "{{ aiqumusername }}"
+        password: "{{ aiqumpassword }}"
+        hostname: "{{ aiqumip }}"
+      with_sequence: start=1  end={{sp_count_iter}}
+      loop_control:
+        loop_var: sp_item
+      ignore_errors: true
+      register: sp_create
+
+    - name: print job creation file
+      debug: msg="{{sp_create}}"
+...

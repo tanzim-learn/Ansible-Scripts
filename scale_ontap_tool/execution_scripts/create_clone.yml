@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+  
+
+
+  tasks:
+    - name: Initialize an empty list for our strings
+      set_fact:
+        test: []
+    - name: second
+      set_fact:
+        my_list: "test1"
+    - name: append
+      set_fact:
+        test: "{{ test + [my_list] }}"
+      register: output
+    - debug: msg="{{ output }}"
+      
+    - name: create volume
+      na_ontap_volume:
+        state: present
+        username: "{{ aiqumusername }}"
+        password: "{{ aiqumpassword }}"
+        hostname: "{{ inventory_hostname }}"
+        vserver: "{{item[0]}}"
+        name:  "{{item[1]}}"
+        aggregate_name: "{{output}}"
+      with_nested:
+        - [ 'vs10' , 'vs11' ]
+        - [ 'o' , 'a' ]
+      connection: local
+...

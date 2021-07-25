@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+
+  tasks:
+    - name: Create Export Policy
+      na_ontap_export_policy:
+        state: present
+        name: "{{export_policy_name}}_{{export_policy_item}}"
+        vserver: "{{export_policy_vserver_name}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+        https: true
+        validate_certs: false
+
+      register: export_policy_create
+      ignore_errors: True
+      with_sequence: start=1 end={{export_policy_count}}
+      loop_control:
+        loop_var: export_policy_item
+
+    - name: Print the export policy creation job
+      debug: msg="{{export_policy_create}}"
+...
+

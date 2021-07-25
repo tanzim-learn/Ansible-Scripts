@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+
+  gather_facts: false
+  vars_files:
+    - /etc/ansible/host_vars
+  vars:
+    list_of_aggregates: []
+
+  tasks:
+ 
+    - name: Create Aggregates and wait 5 minutes until aggregate is online
+      na_ontap_aggregate:
+        state: present
+        service_state: online
+        name: "{{aggregate_name}}"
+        disk_count: "{{aggregate_disk_count}}"
+        wait_for_online: True
+        time_out: "{{aggregate_time_out}}"
+        hostname: "{{ netapp_hostname }}"
+        username: "{{ netapp_username }}"
+        password: "{{ netapp_password }}"
+        https: true
+        validate_certs: false
+      register: aggr_create
+      ignore_errors: True
+
+    - name: Print the aggregate creation job
+      debug: msg="{{aggr_create}}"			
+...
+
